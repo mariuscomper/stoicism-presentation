@@ -4,22 +4,33 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Status](https://img.shields.io/badge/status-ready-brightgreen)]()
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://mariuscomper.github.io/stoicism-presentation/)
 
-## 🚀 Quick Start
+## 🚀 View Online
 
-The easiest way to run the presentation:
+**👉 [https://mariuscomper.github.io/stoicism-presentation/](https://mariuscomper.github.io/stoicism-presentation/)**
+
+No installation required! Just click the link above to start the presentation.
+
+---
+
+## 💻 Run Locally (Optional)
+
+If you prefer to run it locally:
 
 ```bash
+# Clone the repository
+git clone https://github.com/mariuscomper/stoicism-presentation.git
+cd stoicism-presentation
+
+# Option 1: Use the quick start script
 ./RUN_PRESENTATION.sh
-```
 
-Or manually:
-
-```bash
+# Option 2: Run Python server manually
 python3 server.py
-```
 
-Then open **http://localhost:8000** in your browser.
+# Then open http://localhost:8000
+```
 
 ---
 
@@ -87,10 +98,10 @@ Then open **http://localhost:8000** in your browser.
 ## 🛠️ Tech Stack
 
 - **Frontend**: HTML5, CSS3, JavaScript ES6+
-- **Backend**: Python 3 (development server)
 - **Data**: JSON (easy to edit)
 - **Dependencies**: Zero! Pure vanilla code
 - **Size**: Only 67 KB total
+- **Hosting**: GitHub Pages (free!)
 
 ---
 
@@ -101,8 +112,8 @@ Then open **http://localhost:8000** in your browser.
 ├── index.html              # Main web app
 ├── app.js                  # Interactive features
 ├── presentation_data.json  # Slide content (editable!)
-├── server.py              # Development server
-├── RUN_PRESENTATION.sh    # Quick start script
+├── server.py              # Local dev server (optional)
+├── RUN_PRESENTATION.sh    # Quick start script (optional)
 │
 ├── Documentation/
 │   ├── START_HERE.md       # Quick start guide
@@ -169,7 +180,8 @@ Edit CSS variables in `index.html`:
 1. **Fullscreen mode** - Press `F` before presenting
 2. **Overview mode** - Use `Esc` to navigate quickly
 3. **Auto-play** - Press `A` for hands-free demos
-4. **Second monitor** - Show overview on laptop, present on screen
+4. **Share the link** - Send the GitHub Pages URL to anyone!
+5. **Second monitor** - Show overview on laptop, present on screen
 
 ---
 
@@ -180,18 +192,30 @@ Edit CSS variables in `index.html`:
 - **File Size**: 67 KB
 - **Slides**: 19
 - **Browser Support**: All modern browsers
+- **Accessibility**: Works on any device with a browser
 
 ---
 
 ## 🎓 Ready to Present!
 
-Everything is set up and working perfectly.
+Just visit **[mariuscomper.github.io/stoicism-presentation](https://mariuscomper.github.io/stoicism-presentation/)** and you're ready to go!
 
-1. Run `./RUN_PRESENTATION.sh` or `python3 server.py`
-2. Open **http://localhost:8000**
-3. Press **`F`** for fullscreen
-4. Navigate with **arrow keys**
-5. Share Stoic wisdom! 🏛️
+1. Press **`F`** for fullscreen
+2. Navigate with **arrow keys**
+3. Share Stoic wisdom! 🏛️
+
+---
+
+## 🌐 Share This Presentation
+
+Perfect for:
+- Philosophy classes and lectures
+- Book clubs and discussion groups
+- Personal study and reflection
+- Workshops on mental resilience
+- Introduction to Stoic practices
+
+Simply share the link: **https://mariuscomper.github.io/stoicism-presentation/**
 
 ---
 
@@ -201,4 +225,4 @@ MIT License - feel free to use this for your own presentations!
 
 ---
 
-**Built with Claude Code** • **Zero Dependencies** • **Production Ready**
+**Built with Claude Code** • **Zero Dependencies** • **Live on GitHub Pages**
