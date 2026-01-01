@@ -335,7 +335,7 @@ class PresentationApp {
             }
 
             // Complex content structures (exercises, practices, etc.)
-            if (content.whatItIs || content.definition || content.modernChallenge || content.directLineage || content.sabs || content.morning || content.evening) {
+            if (content.whatItIs || content.definition || content.modernChallenge || content.directLineage || content.sabs || content.morning || content.evening || content.realWorldScenarios || content.corePrinciples) {
                 html += this.renderComplexContent(content);
             }
 
