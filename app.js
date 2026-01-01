@@ -651,6 +651,15 @@ class PresentationApp {
                             ${value.note ? `<p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--accent);"><strong>Note:</strong> ${value.note}</p>` : ''}
                         </div>
                     `;
+                } else if (key === 'mindfulScroll' && value.title && value.questions) {
+                    html += `
+                        <div class="card" style="margin: 1.5rem 0; background: rgba(196, 154, 108, 0.1);">
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">${value.title}</h4>
+                            <ul style="margin-top: 0.5rem;">
+                                ${value.questions.map(q => `<li>${q}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
                 }
             } else if (Array.isArray(value)) {
                 // Exercises, strategies, practical prompts
