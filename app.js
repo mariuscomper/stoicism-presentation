@@ -335,7 +335,7 @@ class PresentationApp {
             }
 
             // Complex content structures (exercises, practices, etc.)
-            if (content.whatItIs || content.definition || content.modernChallenge || content.directLineage || content.sabs || content.morning || content.evening || content.realWorldScenarios || content.corePrinciples) {
+            if (content.whatItIs || content.definition || content.modernChallenge || content.directLineage || content.sabs || content.morning || content.evening || content.realWorldScenarios || content.corePrinciples || content.tradition || content.whyJournal || content.practicalPrompts) {
                 html += this.renderComplexContent(content);
             }
 
@@ -641,6 +641,16 @@ class PresentationApp {
                             <p>${value.reflection}</p>
                         </div>
                     `;
+                } else if (key === 'marcusExample' && value.quotes) {
+                    html += `
+                        <div class="card" style="margin: 1.5rem 0; background: rgba(196, 154, 108, 0.1);">
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">Marcus Aurelius' Example</h4>
+                            ${value.quotes.map(quote => `
+                                <p style="font-style: italic; margin-bottom: 0.75rem;">"${quote}"</p>
+                            `).join('')}
+                            ${value.note ? `<p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--accent);"><strong>Note:</strong> ${value.note}</p>` : ''}
+                        </div>
+                    `;
                 }
             } else if (Array.isArray(value)) {
                 // Exercises, strategies, practical prompts
@@ -709,6 +719,22 @@ class PresentationApp {
                                     ${item.description ? `<p>${item.description}</p>` : ''}
                                 </div>
                             `).join('')}
+                        </div>
+                    `;
+                }
+                // Why Journal (slide 13)
+                else if (key === 'whyJournal') {
+                    html += `
+                        <div style="margin: 1.5rem 0;">
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">Why Journal?</h4>
+                            <div class="grid-2">
+                                ${value.map(item => `
+                                    <div class="card">
+                                        <h4 style="color: var(--primary);">${item.reason}</h4>
+                                        <p>${item.description}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
                         </div>
                     `;
                 }
