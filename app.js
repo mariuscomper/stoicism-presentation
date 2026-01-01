@@ -844,13 +844,39 @@ class PresentationApp {
 
     setupOverview() {
         const grid = document.getElementById('overview-grid');
-        grid.innerHTML = this.slides.map((slide, index) => `
-            <div class="overview-slide ${index === this.currentSlide ? 'current' : ''}" data-index="${index}">
-                <div class="overview-number">Slide ${index + 1}</div>
-                <div class="overview-title">${slide.title || slide.subtitle || 'Chapter ' + slide.chapterNumber}</div>
-                <div style="color: var(--accent); font-size: 0.85rem; margin-top: 0.25rem;">${slide.type}</div>
-            </div>
-        `).join('');
+        grid.innerHTML = this.slides.map((slide, index) => {
+            // Get a preview of the content
+            let preview = '';
+            if (slide.type === 'cover') {
+                preview = `<div style="text-align: center;"><i class="fas fa-landmark" style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;"></i></div>`;
+            } else if (slide.type === 'chapter') {
+                preview = `<div style="text-align: center;"><div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${slide.chapterNumber}</div></div>`;
+            } else if (slide.type === 'table_of_contents') {
+                preview = `<div style="font-size: 0.7rem; line-height: 1.2;"><i class="fas fa-list"></i> Contents</div>`;
+            } else if (slide.type === 'final') {
+                preview = `<div style="text-align: center;"><i class="fas fa-scroll" style="font-size: 2rem; color: var(--primary);"></i></div>`;
+            } else if (slide.content) {
+                // Show icons or hints about content type
+                if (slide.content.timeline) preview = `<i class="fas fa-history"></i> Timeline`;
+                else if (slide.content.virtues) preview = `<i class="fas fa-balance-scale"></i> Virtues`;
+                else if (slide.content.teachers) preview = `<i class="fas fa-users"></i> Teachers`;
+                else if (slide.content.exercises) preview = `<i class="fas fa-dumbbell"></i> Exercises`;
+                else if (slide.content.morning || slide.content.evening) preview = `<i class="fas fa-sun"></i> Routines`;
+                else if (slide.content.realWorldScenarios) preview = `<i class="fas fa-compass"></i> Practice`;
+                else preview = `<i class="fas fa-book-open"></i> Content`;
+            }
+
+            return `
+                <div class="overview-slide ${index === this.currentSlide ? 'current' : ''}" data-index="${index}">
+                    <div class="overview-number">Slide ${index + 1}</div>
+                    <div class="overview-preview" style="min-height: 50px; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 0.85rem; margin: 0.5rem 0;">
+                        ${preview}
+                    </div>
+                    <div class="overview-title" style="font-weight: bold; font-size: 0.9rem;">${slide.title || slide.subtitle || 'Chapter ' + slide.chapterNumber}</div>
+                    ${slide.subtitle && slide.type !== 'chapter' ? `<div style="color: var(--accent); font-size: 0.75rem; margin-top: 0.25rem;">${slide.subtitle}</div>` : ''}
+                </div>
+            `;
+        }).join('');
 
         // Add click handlers
         grid.querySelectorAll('.overview-slide').forEach(el => {
