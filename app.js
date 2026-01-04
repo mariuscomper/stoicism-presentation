@@ -170,7 +170,7 @@ class PresentationApp {
                 ${quote ? `
                     <div class="quote" style="margin: 2rem 0;">
                         <p style="font-size: 1.3rem;">"${quote.text}"</p>
-                        <p class="quote-author">— ${quote.author}</p>
+                        ${quote.author ? `<p class="quote-author">— ${quote.author}</p>` : ''}
                     </div>
                 ` : ''}
                 ${cards ? `<div class="grid-4">${cards}</div>` : ''}
@@ -612,7 +612,14 @@ class PresentationApp {
                                     ${step.description ? `<p style="margin-bottom: 0.5rem;">${step.description}</p>` : ''}
                                     ${step.questions ? `
                                         <ul style="margin-top: 0.5rem; font-style: italic;">
-                                            ${step.questions.map(q => `<li>${q}</li>`).join('')}
+                                            ${step.questions.map(q => {
+                                                if (typeof q === 'string') {
+                                                    return `<li>${q}</li>`;
+                                                } else if (q.question) {
+                                                    return `<li>${q.question}${q.purpose ? ` <span style="color: var(--accent); font-size: 0.9rem;">(${q.purpose})</span>` : ''}</li>`;
+                                                }
+                                                return '';
+                                            }).join('')}
                                         </ul>
                                     ` : ''}
                                     ${step.quote ? `<p style="margin-top: 0.5rem; font-style: italic; color: var(--accent);">"${step.quote}"</p>` : ''}
