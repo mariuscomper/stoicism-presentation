@@ -50,7 +50,8 @@ python3 server.py
 ### Visual Features
 - 🎨 **Smooth animations** - Professional transitions
 - 📊 **Progress tracking** - Visual bar + slide counter
-- 🌓 **Dark theme** - Stoic aesthetic
+- 🌓 **Light and dark themes** - explicit, persistent theme control
+- ♿ **Reduced-motion support** - respects the system accessibility preference
 - 📱 **Responsive design** - Works on all devices
 
 ---
@@ -98,6 +99,9 @@ python3 server.py
 ## 🛠️ Tech Stack
 
 - **Frontend**: HTML5, CSS3, JavaScript ES6+
+- **Dependencies**: none; fonts and icons use local system fallbacks
+
+The former `stoicism_presentation.html` entry is retained as a dependency-free compatibility redirect to `index.html`.
 - **Data**: JSON (easy to edit)
 - **Dependencies**: Zero! Pure vanilla code
 - **Size**: Only 67 KB total

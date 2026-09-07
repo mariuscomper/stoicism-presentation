@@ -23,7 +23,7 @@ class PresentationApp {
             console.error('Failed to initialize app:', error);
             document.getElementById('slide-container').innerHTML = `
                 <div style="text-align: center; padding: 2rem;">
-                    <p style="color: #C49A6C; font-size: 1.5rem;">Error loading presentation</p>
+                    <p class="error-title">Error loading presentation</p>
                     <p style="margin-top: 1rem;">Please make sure presentation_data.json is available.</p>
                 </div>
             `;
@@ -67,10 +67,10 @@ class PresentationApp {
 
         // Add navigation arrows
         container.innerHTML += `
-            <button class="nav-arrow left" id="prev-btn" title="Previous (←)">
+            <button class="nav-arrow left" id="prev-btn" title="Previous (←)" aria-label="Previous slide">
                 <i class="fas fa-chevron-left"></i>
             </button>
-            <button class="nav-arrow right" id="next-btn" title="Next (→)">
+            <button class="nav-arrow right" id="next-btn" title="Next (→)" aria-label="Next slide">
                 <i class="fas fa-chevron-right"></i>
             </button>
         `;
@@ -100,6 +100,12 @@ class PresentationApp {
         }
     }
 
+    toneClass(color) {
+        return String(color || '').toLowerCase() === '#5c6d67'
+            ? 'tone-secondary'
+            : 'tone-primary';
+    }
+
     renderCoverSlide(slide) {
         return `
             <h1 class="font-display">${slide.title}</h1>
@@ -110,11 +116,11 @@ class PresentationApp {
     }
 
     renderTOCSlide(slide) {
-        const sections = slide.sections.map((section, i) => `
-            <div class="card" style="border-left-color: ${section.color}">
+        const sections = slide.sections.map(section => `
+            <div class="card ${this.toneClass(section.color)}">
                 <div style="display: flex; align-items: start; gap: 1.5rem;">
-                    <div class="card-icon" style="background: ${section.color}; flex-shrink: 0;">
-                        <span class="font-display" style="color: #2B2B2B; font-size: 1.5rem; font-weight: bold;">${section.number}</span>
+                    <div class="card-icon ${this.toneClass(section.color)}" style="flex-shrink: 0;">
+                        <span class="font-display card-icon-number" style="font-size: 1.5rem; font-weight: bold;">${section.number}</span>
                     </div>
                     <div>
                         <h3 class="font-heading">${section.title}</h3>
@@ -201,7 +207,7 @@ class PresentationApp {
         // Add closing note if exists
         if (slide.note) {
             html += `
-                <div class="card" style="margin-top: 1.5rem; background: rgba(196, 154, 108, 0.1);">
+                <div class="card accent-surface" style="margin-top: 1.5rem;">
                     <p><strong>${slide.note.title || 'Note'}:</strong> ${slide.note.text}</p>
                 </div>
             `;
@@ -313,7 +319,7 @@ class PresentationApp {
                     const note = typeof content.unityNote === 'string'
                         ? { text: content.unityNote }
                         : content.unityNote;
-                    html += `<div class="card" style="margin-top: 2rem; background: rgba(196, 154, 108, 0.1);">
+                    html += `<div class="card accent-surface" style="margin-top: 2rem;">
                         <p style="text-align: center;">${note.title ? `<strong>${note.title}:</strong> ` : ''}${note.text}</p>
                     </div>`;
                 }
@@ -360,7 +366,7 @@ class PresentationApp {
                         ${card.subtitle ? `<p style="color: var(--primary); margin-bottom: 0.5rem;"><strong>${card.subtitle}</strong></p>` : ''}
                         ${card.text ? `<p style="color: var(--accent);">${card.text}</p>` : ''}
                         ${card.practice ? `
-                            <div style="background: rgba(43, 43, 43, 0.6); padding: 0.75rem; border-radius: 4px; margin-top: 0.75rem;">
+                            <div class="deep-surface" style="padding: 0.75rem; border-radius: 4px; margin-top: 0.75rem;">
                                 <p style="font-size: 0.9rem;"><strong>Practice:</strong> ${card.practice}</p>
                             </div>
                         ` : ''}
@@ -374,7 +380,7 @@ class PresentationApp {
         return `
             <div style="margin: 2rem 0;">
                 ${timeline.map((item, i) => `
-                    <div style="display: flex; gap: 1.5rem; margin-bottom: 2rem; padding: 1.5rem; background: rgba(58, 58, 58, 0.4); border-radius: 8px; border-left: 4px solid ${item.color || 'var(--primary)'};">
+                    <div class="timeline-entry ${this.toneClass(item.color)}">
                         <div style="flex-shrink: 0; text-align: center; min-width: 120px;">
                             <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-bottom: 0.5rem;">${item.period}</div>
                         </div>
@@ -382,7 +388,7 @@ class PresentationApp {
                             <h3 style="font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--primary);">${item.name || item.title}</h3>
                             ${item.role ? `<p style="font-style: italic; color: var(--accent); margin-bottom: 0.75rem;">${item.role}</p>` : ''}
                             <p style="color: var(--text); margin-bottom: 0.75rem;">${item.description}</p>
-                            ${item.keyInsight ? `<p style="font-style: italic; color: var(--primary); padding: 0.75rem; background: rgba(196, 154, 108, 0.1); border-radius: 4px; margin-top: 0.75rem;"><strong>Key Insight:</strong> "${item.keyInsight}"</p>` : ''}
+                            ${item.keyInsight ? `<p class="accent-surface" style="font-style: italic; color: var(--primary); padding: 0.75rem; border-radius: 4px; margin-top: 0.75rem;"><strong>Key Insight:</strong> "${item.keyInsight}"</p>` : ''}
                         </div>
                     </div>
                 `).join('')}
@@ -412,8 +418,8 @@ class PresentationApp {
         return `
             <div class="grid-2" style="margin: 2rem 0;">
                 ${sections.map(section => `
-                    <div class="card" style="border-left-color: ${section.color || 'var(--primary)'}">
-                        ${section.icon ? `<div class="card-icon" style="background: ${section.color || 'var(--primary)'}"><i class="fas ${section.icon}"></i></div>` : ''}
+                    <div class="card ${this.toneClass(section.color)}">
+                        ${section.icon ? `<div class="card-icon ${this.toneClass(section.color)}"><i class="fas ${section.icon}"></i></div>` : ''}
                         <h3 style="color: var(--primary); margin-bottom: 1rem;">${section.heading}</h3>
                         ${Array.isArray(section.text) ? section.text.map(p => `<p style="margin-bottom: 0.75rem;">${p}</p>`).join('') : `<p>${section.text}</p>`}
                     </div>
@@ -446,16 +452,16 @@ class PresentationApp {
         return `
             <div class="grid-2" style="margin: 2rem 0;">
                 ${virtues.map(virtue => `
-                    <div class="card" style="border-left-color: ${virtue.color || 'var(--primary)'}">
+                    <div class="card ${this.toneClass(virtue.color)}">
                         <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem;">
-                            <div class="card-icon" style="background: ${virtue.color || 'var(--primary)'}; width: 40px; height: 40px; margin: 0;">
+                            <div class="card-icon ${this.toneClass(virtue.color)}" style="width: 40px; height: 40px; margin: 0;">
                                 <i class="fas ${virtue.icon}" style="font-size: 1.2rem;"></i>
                             </div>
                             <h3 style="color: var(--primary); margin: 0;">${virtue.name}</h3>
                         </div>
                         <p style="font-weight: bold; color: var(--primary); margin-bottom: 0.5rem;">${virtue.subtitle}</p>
                         <p style="margin-bottom: 0.75rem;">${virtue.description}</p>
-                        <div style="background: rgba(43, 43, 43, 0.6); padding: 0.75rem; border-radius: 4px;">
+                        <div class="deep-surface" style="padding: 0.75rem; border-radius: 4px;">
                             <p style="font-size: 0.9rem;"><strong>Practice:</strong> ${virtue.practice}</p>
                         </div>
                     </div>
@@ -472,7 +478,7 @@ class PresentationApp {
                     <p style="margin-top: 1rem;">${content.epictetus.explanation}</p>
                 </div>
                 <div class="grid-2">
-                    <div class="card" style="border-left-color: ${content.withinControl.color};">
+                    <div class="card ${this.toneClass(content.withinControl.color)}">
                         <h3 style="color: var(--primary); margin-bottom: 1rem;">${content.withinControl.title}</h3>
                         <ul style="margin-bottom: 1rem;">
                             ${content.withinControl.items.map(item => `
@@ -483,7 +489,7 @@ class PresentationApp {
                         </ul>
                         <p style="font-style: italic; color: var(--primary);">${content.withinControl.summary}</p>
                     </div>
-                    <div class="card" style="border-left-color: ${content.beyondControl.color};">
+                    <div class="card ${this.toneClass(content.beyondControl.color)}">
                         <h3 style="color: var(--accent); margin-bottom: 1rem;">${content.beyondControl.title}</h3>
                         <ul style="margin-bottom: 1rem;">
                             ${content.beyondControl.items.map(item => `
@@ -496,7 +502,7 @@ class PresentationApp {
                     </div>
                 </div>
                 ${content.practice ? `
-                    <div class="card" style="margin-top: 2rem; background: rgba(196, 154, 108, 0.1);">
+                    <div class="card accent-surface" style="margin-top: 2rem;">
                         ${Array.isArray(content.practice) ? `
                             <h4 style="color: var(--primary); margin-bottom: 1rem;">Practice</h4>
                             ${content.practice.map(step => `
@@ -518,17 +524,17 @@ class PresentationApp {
         return `
             <div class="grid-2" style="margin: 2rem 0;">
                 ${teachers.map(teacher => `
-                    <div class="card" style="border-left-color: ${teacher.color || 'var(--primary)'}">
+                    <div class="card ${this.toneClass(teacher.color)}">
                         <h3 style="color: var(--primary); margin-bottom: 0.5rem;">${teacher.name}</h3>
                         <p style="font-style: italic; color: var(--accent); margin-bottom: 0.75rem;">${teacher.role}</p>
                         <p style="margin-bottom: 0.75rem;">${teacher.description}</p>
                         ${teacher.quote ? `
-                            <div style="background: rgba(196, 154, 108, 0.1); padding: 0.75rem; border-radius: 4px; margin-bottom: 0.75rem;">
+                            <div class="accent-surface" style="padding: 0.75rem; border-radius: 4px; margin-bottom: 0.75rem;">
                                 <p style="font-size: 0.95rem; font-style: italic;">"${teacher.quote}"</p>
                             </div>
                         ` : ''}
                         ${teacher.inspiration ? `
-                            <div style="background: rgba(196, 154, 108, 0.1); padding: 0.75rem; border-radius: 4px;">
+                            <div class="accent-surface" style="padding: 0.75rem; border-radius: 4px;">
                                 <p style="font-size: 0.95rem;"><strong>Inspiration:</strong> "${teacher.inspiration}"</p>
                             </div>
                         ` : ''}
@@ -569,13 +575,13 @@ class PresentationApp {
             <div style="margin: 2rem 0;">
                 <h3 style="color: var(--primary); margin-bottom: 1.5rem; font-size: 1.5rem;">${dichotomy.title}</h3>
                 <div class="grid-2">
-                    <div class="card" style="border-left-color: var(--accent);">
+                    <div class="card tone-secondary">
                         <h4 style="color: var(--accent); margin-bottom: 1rem;">Beyond Our Control</h4>
                         <ul>
                             ${dichotomy.beyondControl.map(item => `<li>${item}</li>`).join('')}
                         </ul>
                     </div>
-                    <div class="card" style="border-left-color: var(--primary);">
+                    <div class="card tone-primary">
                         <h4 style="color: var(--primary); margin-bottom: 1rem;">Within Our Control</h4>
                         <ul>
                             ${dichotomy.withinControl.map(item => `<li>${item}</li>`).join('')}
@@ -583,7 +589,7 @@ class PresentationApp {
                     </div>
                 </div>
                 ${dichotomy.keyInsight ? `
-                    <div class="card" style="margin-top: 2rem; background: rgba(196, 154, 108, 0.1);">
+                    <div class="card accent-surface" style="margin-top: 2rem;">
                         <p style="font-style: italic; text-align: center;">${dichotomy.keyInsight}</p>
                     </div>
                 ` : ''}
@@ -602,12 +608,12 @@ class PresentationApp {
                 // Morning/Evening routines (slide 11)
                 if ((key === 'morning' || key === 'evening') && value.steps) {
                     html += `
-                        <div class="card" style="margin: 1.5rem 0; border-left-color: ${value.color || 'var(--primary)'}">
-                            ${value.icon ? `<div class="card-icon" style="background: ${value.color || 'var(--primary)'}"><i class="fas ${value.icon}"></i></div>` : ''}
+                        <div class="card ${this.toneClass(value.color)}" style="margin: 1.5rem 0;">
+                            ${value.icon ? `<div class="card-icon ${this.toneClass(value.color)}"><i class="fas ${value.icon}"></i></div>` : ''}
                             <h3 style="color: var(--primary); margin-bottom: 0.75rem;">${value.title}</h3>
                             ${value.introduction ? `<p style="margin-bottom: 1rem;">${value.introduction}</p>` : ''}
                             ${value.steps.map(step => `
-                                <div style="margin: 1rem 0; padding: 1rem; background: rgba(43, 43, 43, 0.4); border-radius: 4px;">
+                                <div class="deep-surface" style="margin: 1rem 0; padding: 1rem; border-radius: 4px;">
                                     <p style="font-weight: bold; color: var(--primary); margin-bottom: 0.5rem;">Step ${step.number}: ${step.title}</p>
                                     ${step.description ? `<p style="margin-bottom: 0.5rem;">${step.description}</p>` : ''}
                                     ${step.questions ? `
@@ -638,19 +644,19 @@ class PresentationApp {
                             ${value.items ? `<ul style="margin-top: 0.75rem;">${value.items.map(item => `<li>${item}</li>`).join('')}</ul>` : ''}
                             ${value.distinction ? `<ul style="margin-top: 0.75rem;">${value.distinction.map(item => `<li>${item}</li>`).join('')}</ul>` : ''}
                             ${value.steps ? `<ol style="margin-top: 0.75rem;">${value.steps.map(step => `<li>${step}</li>`).join('')}</ol>` : ''}
-                            ${value.keyInsight ? `<p style="margin-top: 1rem; padding: 0.75rem; background: rgba(196, 154, 108, 0.1); border-radius: 4px; font-style: italic;">${value.keyInsight}</p>` : ''}
+                            ${value.keyInsight ? `<p class="accent-surface" style="margin-top: 1rem; padding: 0.75rem; border-radius: 4px; font-style: italic;">${value.keyInsight}</p>` : ''}
                         </div>
                     `;
                 } else if (value.question && value.reflection) {
                     html += `
-                        <div class="card" style="margin: 1.5rem 0; background: rgba(196, 154, 108, 0.1);">
+                        <div class="card accent-surface" style="margin: 1.5rem 0;">
                             <p style="font-weight: bold; margin-bottom: 0.5rem;">${value.question}</p>
                             <p>${value.reflection}</p>
                         </div>
                     `;
                 } else if (key === 'marcusExample' && value.quotes) {
                     html += `
-                        <div class="card" style="margin: 1.5rem 0; background: rgba(196, 154, 108, 0.1);">
+                        <div class="card accent-surface" style="margin: 1.5rem 0;">
                             <h4 style="color: var(--primary); margin-bottom: 1rem;">Marcus Aurelius' Example</h4>
                             ${value.quotes.map(quote => `
                                 <p style="font-style: italic; margin-bottom: 0.75rem;">"${quote}"</p>
@@ -660,7 +666,7 @@ class PresentationApp {
                     `;
                 } else if (key === 'mindfulScroll' && value.title && value.questions) {
                     html += `
-                        <div class="card" style="margin: 1.5rem 0; background: rgba(196, 154, 108, 0.1);">
+                        <div class="card accent-surface" style="margin: 1.5rem 0;">
                             <h4 style="color: var(--primary); margin-bottom: 1rem;">${value.title}</h4>
                             <ul style="margin-top: 0.5rem;">
                                 ${value.questions.map(q => `<li>${q}</li>`).join('')}
@@ -756,7 +762,7 @@ class PresentationApp {
                 }
             } else if (typeof value === 'string' && (key === 'paradox' || key === 'clarification' || key === 'powerOfHabit' || key === 'senecaPractice' || key === 'reminder' || key === 'sabsAsTool')) {
                 html += `
-                    <div class="card" style="margin: 1.5rem 0; background: rgba(196, 154, 108, 0.1);">
+                    <div class="card accent-surface" style="margin: 1.5rem 0;">
                         <p style="font-style: italic;">${value}</p>
                     </div>
                 `;
